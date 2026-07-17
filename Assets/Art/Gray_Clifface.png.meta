@@ -128,7 +128,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Gray_Clifface_0: 3380754576206733041
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

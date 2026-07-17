@@ -1,46 +1,46 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BoltScript : MonoBehaviour
 {
     public float speed = 20f;
-    public Rigidbody2D rb;
-    private float timeLeft = 8f;
+    public float lifetime = 3f;
     public float damage = 5f;
 
-    // Start is called before the first frame update
-    void Start()
+    private Rigidbody2D rb;
+
+    void Awake()
     {
-        rb = this.GetComponent<Rigidbody2D>();
-        timeLeft = 5;
-        rb.velocity = transform.up * speed;
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
+    void Start()
     {
-        timeLeft -= Time.deltaTime;
+        if (rb != null)
+        {
+            rb.velocity = transform.right * speed;
+        }
 
-        if (timeLeft <= 0f)
-            ThisDies();
+        // Ignore collision with player for a short time
+        Collider2D playerCollider = GameObject.FindGameObjectWithTag("Player").GetComponent<Collider2D>();
+        if (playerCollider != null)
+        {
+            Physics2D.IgnoreCollision(GetComponent<Collider2D>(), playerCollider, true);
+        }
 
+        Destroy(gameObject, lifetime);
     }
 
     void OnTriggerEnter2D(Collider2D hitInfo)
     {
+        if (hitInfo.CompareTag("Player"))
+            return;   // Extra safety
+
         EnemyStats enemy = hitInfo.GetComponent<EnemyStats>();
-        
-         if(enemy != null){
+        if (enemy != null)
+        {
             enemy.takeDamage(damage);
-         }
+        }
 
-        ThisDies();
-
-    }
-
-    void ThisDies()
-    {
         Destroy(gameObject);
     }
 }
